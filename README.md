@@ -1,5 +1,5 @@
 import random
-import time  # Importado para criar o efeito de animação
+import time
 
 '''Criação da classe logo que será herdada pela classe personagem de naruto'''
 class logo:
@@ -8,7 +8,7 @@ class logo:
 
 '''Criação da classe personagem de naruto'''
 class personagem_naruto(logo):
-    def __init__(self, nome = " ", qi = 0 , taijutsu = 0, ninjutsu = 0, genjutsu = 0):
+    def __init__(self, nome=" ", qi=0, taijutsu=0, ninjutsu=0, genjutsu=0):
         self.nome = nome
         self.qi = qi
         self.taijutsu = taijutsu
@@ -24,10 +24,10 @@ class personagem_naruto(logo):
         print(f"- Genjutsu: {self.genjutsu} -")
         print(f"- Logo: {self.logo} -")
 
-    def exibir_carta_jogo(self, dono):
+    def exibir_carta_jogo(self, dono, numero_rodada):
         # Efeito de digitação rápida para os atributos da carta
         linhas = [
-            f"== CARTA DO {dono}: {self.nome} ==",
+            f"== CARTA DO {dono} (RODADA {numero_rodada}): {self.nome} ==",
             f" QI: {self.qi}",
             f" Taijutsu: {self.taijutsu}",
             f" Ninjutsu: {self.ninjutsu}",
@@ -37,146 +37,174 @@ class personagem_naruto(logo):
         ]
         for linha in linhas:
             print(linha)
-            time.sleep(0.15)  # Pequena pausa entre cada linha do card
+            time.sleep(0.15)
 
-# --- INTRODUÇÃO COM ANIMAÇÃO ---
-print("=" * 52)
-time.sleep(0.2)
-print("| Bem-vindo ao nosso jogo: Super Naruto!           |")
-time.sleep(0.2)
-print("=" * 52)
-time.sleep(0.4)
-print("|                                                  |")
-print("-" * 52)
-print("Aqui estão todas as cartas do nosso jogo:          |")
-print("-" * 52)
-time.sleep(0.5)
+# Loop principal do jogo (Botão Jogar Novamente)
+while True:
+    # Criando os personagens do zero a cada novo jogo para reiniciar o deck
+    naruto = personagem_naruto("Naruto", 6, 7, 8, 4)
+    sasuke = personagem_naruto("Sasuke", 7, 7, 10, 8)
+    sakura = personagem_naruto("Sakura", 8, 6, 6, 7)
+    tsunade = personagem_naruto("Tsunade", 10, 10, 10, 7)
+    kakashi = personagem_naruto("Kakashi", 10, 9, 10, 8)
+    itachi = personagem_naruto("Itachi", 10, 9, 10, 11)
+    shikamaru = personagem_naruto("Shikamaru", 10, 4, 7, 6)
+    gai = personagem_naruto("Gai", 6, 10, 6, 6)
 
-naruto = personagem_naruto("Naruto" ,6, 7, 8, 4)
-naruto.exibir()
-print("|                                                  |")
-print("=" * 52)
+    # --- INTRODUÇÃO COM ANIMAÇÃO ---
+    print("\n" + "=" * 52)
+    time.sleep(0.2)
+    print("| Bem-vindo ao nosso jogo: Super Naruto!           |")
+    time.sleep(0.2)
+    print("=" * 52)
+    time.sleep(0.4)
+    
+    # --- PREPARAÇÃO DO JOGO ---
+    print("\n[ Embaralhando as cartas do deck... ]")
+    time.sleep(1.0)
 
-sasuke = personagem_naruto("Sasuke",7, 7, 10, 8)
-sasuke.exibir()
-print("|                                                  |")
-print("=" * 52)
+    Cartas = [naruto, sasuke, sakura, kakashi, itachi, shikamaru, gai, tsunade]
+    random.shuffle(Cartas)
+    
+    pontos_usuario = 0
+    pontos_cpu = 0
 
-sakura = personagem_naruto("Sakura",8, 6, 6, 7)
-sakura.exibir()
-print("|                                                  |")
-print("=" * 52)
+    # Puxando as cartas para as duas rodadas de uma vez só
+    carta_usuario_r1 = Cartas.pop()
+    carta_usuario_r2 = Cartas.pop()
+    carta_cpu_r1 = Cartas.pop()
+    carta_cpu_r2 = Cartas.pop()
 
-tsunade = personagem_naruto("Tsunade", 10, 10, 10, 7)
-tsunade.exibir()
-print("|                                                  |")
-print("=" * 52)
+    print("\n" + "-" * 50)
+    print(" == SUAS CARTAS PARA AS DUAS RODADAS FORAM RETIRADAS! ==")
+    print("-" * 50)
+    time.sleep(0.5)
+    
+    # Mostra as duas cartas do jogador de uma vez
+    carta_usuario_r1.exibir_carta_jogo("USUÁRIO", 1)
+    print()
+    carta_usuario_r2.exibir_carta_jogo("USUÁRIO", 2)
 
-kakashi = personagem_naruto("Kakashi",10, 9, 10, 8)
-kakashi.exibir()
-print("|                                                  |")
-print("=" * 52)
+    # --- COMBATE: RODADA 1 ---
+    print("\n" + "=" * 50)
+    print("             ⚔️ COMBATE: RODADA 1 ⚔️")
+    print("=" * 50)
+    time.sleep(0.5)
+    
+    print(f"Sua carta atual: {carta_usuario_r1.nome}")
+    print("Atributos disponíveis:\n[1] QI\n[2] Taijutsu\n[3] Ninjutsu\n[4] Genjutsu\n")
+    
+    escolha_r1 = ""
+    while escolha_r1 not in ["1", "2", "3", "4"]:
+        escolha_r1 = input("Escolha o atributo para a RODADA 1 (1 a 4): ").strip()
 
-itachi = personagem_naruto("Itachi", 10, 9, 10, 11)
-itachi.exibir()
-print("|                                                  |")
-print("=" * 52)
+    if escolha_r1 == "1":
+        attr_nome_r1 = "QI"
+        val_usuario_r1 = carta_usuario_r1.qi
+        val_cpu_r1 = carta_cpu_r1.qi
+    elif escolha_r1 == "2":
+        attr_nome_r1 = "Taijutsu"
+        val_usuario_r1 = carta_usuario_r1.taijutsu
+        val_cpu_r1 = carta_cpu_r1.taijutsu
+    elif escolha_r1 == "3":
+        attr_nome_r1 = "Ninjutsu"
+        val_usuario_r1 = carta_usuario_r1.ninjutsu
+        val_cpu_r1 = carta_cpu_r1.ninjutsu
+    else:
+        attr_nome_r1 = "Genjutsu"
+        val_usuario_r1 = carta_usuario_r1.genjutsu
+        val_cpu_r1 = carta_cpu_r1.genjutsu
 
-shikamaru = personagem_naruto("Shikamaru", 10, 4, 7, 6)
-shikamaru.exibir()
-print("|                                                  |")
-print("=" * 52)
+    # --- COMBATE: RODADA 2 ---
+    print("\n" + "=" * 50)
+    print("             ⚔️ COMBATE: RODADA 2 ⚔️")
+    print("=" * 50)
+    time.sleep(0.5)
+    
+    print(f"Sua carta atual: {carta_usuario_r2.nome}")
+    print("Atributos disponíveis:\n[1] QI\n[2] Taijutsu\n[3] Ninjutsu\n[4] Genjutsu\n")
+    
+    escolha_r2 = ""
+    while escolha_r2 not in ["1", "2", "3", "4"]:
+        escolha_r2 = input("Escolha o atributo para a RODADA 2 (1 a 4): ").strip()
 
-gai = personagem_naruto("Gai",6, 10, 6,6)
-gai.exibir()
-print("|                                                  |")
-print("-" * 50)
+    if escolha_r2 == "1":
+        attr_nome_r2 = "QI"
+        val_usuario_r2 = carta_usuario_r2.qi
+        val_cpu_r2 = carta_cpu_r2.qi
+    elif escolha_r2 == "2":
+        attr_nome_r2 = "Taijutsu"
+        val_usuario_r2 = carta_usuario_r2.taijutsu
+        val_cpu_r2 = carta_cpu_r2.taijutsu
+    elif escolha_r2 == "3":
+        attr_nome_r2 = "Ninjutsu"
+        val_usuario_r2 = carta_usuario_r2.ninjutsu
+        val_cpu_r2 = carta_cpu_r2.ninjutsu
+    else:
+        attr_nome_r2 = "Genjutsu"
+        val_usuario_r2 = carta_usuario_r2.genjutsu
+        val_cpu_r2 = carta_cpu_r2.genjutsu
 
-# --- PREPARAÇÃO DO JOGO ---
-print("\n[ Embaralhando as cartas do deck... ]")
-time.sleep(1.5)  # Simula o tempo de embaralhar
+    # --- REVELANDO CARTAS DA CPU ---
+    print("\n" + "-" * 50)
+    print(" == AS CARTAS DO SEU OPONENTE SERÃO REVELADAS... ==")
+    print("-" * 50)
+    time.sleep(1.5)
+    
+    carta_cpu_r1.exibir_carta_jogo("CPU", 1)
+    print()
+    carta_cpu_r2.exibir_carta_jogo("CPU", 2)
+    
+    print("\n[ Analisando os confrontos... ]")
+    time.sleep(2.0)
 
-Cartas = [naruto, sasuke, sakura, kakashi, itachi, shikamaru, gai, tsunade]
-random.shuffle(Cartas)
+    # --- RESOLUÇÃO DA RODADA 1 ---
+    print("\n" + "=" * 50)
+    print(f"   RESULTADO DA RODADA 1 ({attr_nome_r1.upper()})   ")
+    print(f"   {carta_usuario_r1.nome} ({val_usuario_r1}) VS {carta_cpu_r1.nome} ({val_cpu_r1})")
+    print("=" * 50)
+    
+    if val_usuario_r1 > val_cpu_r1:
+        print(f" 🏆 VITÓRIA NA R1! Seu {carta_usuario_r1.nome} venceu!")
+        pontos_usuario += 1
+    elif val_cpu_r1 > val_usuario_r1:
+        print(f" 💥 DERROTA NA R1! O {carta_cpu_r1.nome} da CPU venceu!")
+        pontos_cpu += 1
+    else:
+        print(" 🛡️ EMPATE NA R1!")
+    
+    time.sleep(1.5)
 
-pontos_usuario = 0
-pontos_cpu = 0
+    # --- RESOLUÇÃO DA RODADA 2 ---
+    print("\n" + "=" * 50)
+    print(f"   RESULTADO DA RODADA 2 ({attr_nome_r2.upper()})   ")
+    print(f"   {carta_usuario_r2.nome} ({val_usuario_r2}) VS {carta_cpu_r2.nome} ({val_cpu_r2})")
+    print("=" * 50)
+    
+    if val_usuario_r2 > val_cpu_r2:
+        print(f" 🏆 VITÓRIA NA R2! Seu {carta_usuario_r2.nome} venceu!")
+        pontos_usuario += 1
+    elif val_cpu_r2 > val_usuario_r2:
+        print(f" 💥 DERROTA NA R2! O {carta_cpu_r2.nome} da CPU venceu!")
+        pontos_cpu += 1
+    else:
+        print(" 🛡️ EMPATE NA R2!")
 
-print("\n" + "-" * 50)
-print(" == SELECIONANDO E MOSTRAR A SUA CARTA ==")
-print("-" * 50)
-time.sleep(0.8)
+    # --- PLACAR FINAL DO JOGO ---
+    time.sleep(1.0)
+    print("\n" + "#" * 50)
+    print(f"       PLACAR FINAL: Usuário {pontos_usuario} x {pontos_cpu} CPU")
+    
+    if pontos_usuario > pontos_cpu:
+        print("       🎉 PARABÉNS! VOCÊ GANHOU O JOGO! 🎉")
+    elif pontos_cpu > pontos_usuario:
+        print("       😢 A CPU LEVOU A MELHOR DESSA VEZ!")
+    else:
+        print("       🤝 O JOGO TERMINOU EM EMPATE GERAL!")
+    print("#" * 50 + "\n")
 
-carta_usuario = Cartas.pop()
-carta_usuario.exibir_carta_jogo("USUÁRIO")
-
-# --- SISTEMA DE COMBATE ---
-print("\n" + "=" * 50)
-print("             ⚔️ COMBATE INICIADO ⚔️")
-print("=" * 50)
-time.sleep(0.5)
-
-print("Atributos disponíveis:\n[1] QI\n[2] Taijutsu\n[3] Ninjutsu\n[4] Genjutsu\n")
-
-escolha = ""
-while escolha not in ["1", "2", "3", "4"]:
-    escolha = input("Escolha o número do atributo para lutar (1 a 4): ").strip()
-
-if escolha == "1":
-    attr_nome = "QI"
-    val_usuario = carta_usuario.qi
-elif escolha == "2":
-    attr_nome = "Taijutsu"
-    val_usuario = carta_usuario.taijutsu
-elif escolha == "3":
-    attr_nome = "Ninjutsu"
-    val_usuario = carta_usuario.ninjutsu
-else:
-    attr_nome = "Genjutsu"
-    val_usuario = carta_usuario.genjutsu
-
-print("-" * 50)
-print(f"Você escolheu lutar com: {attr_nome} (Valor: {val_usuario})")
-print("-" * 50)
-time.sleep(1.0)
-
-print("\n == A CARTA DO SEU OPONENTE VAI SER REVELADA... ==")
-print("-" * 50)
-time.sleep(1.5)  # Suspense para revelar a carta da CPU
-
-carta_CPU = Cartas.pop()
-carta_CPU.exibir_carta_jogo("CPU")
-
-if escolha == "1":
-    val_cpu = carta_CPU.qi
-elif escolha == "2":
-    val_cpu = carta_CPU.taijutsu
-elif escolha == "3":
-    val_cpu = carta_CPU.ninjutsu
-else:
-    val_cpu = carta_CPU.genjutsu
-
-# Resumo do confronto com suspense
-print("\n[ Analisando o combate... ]")
-time.sleep(1.5)
-
-print("\n" + "=" * 50)
-print(f"   CONFRONTO DE {attr_nome.upper()}   ")
-print(f"   {carta_usuario.nome} ({val_usuario}) VS {carta_CPU.nome} ({val_cpu})")
-print("=" * 50)
-time.sleep(1.0)
-
-# Lógica de resultado
-if val_usuario > val_cpu:
-    print(f" 🏆 VITÓRIA! Seu {carta_usuario.nome} venceu o {carta_CPU.nome} da CPU!")
-    pontos_usuario += 1
-elif val_cpu > val_usuario:
-    print(f" 💥 DERROTA! O {carta_CPU.nome} da CPU venceu seu {carta_usuario.nome}!")
-    pontos_cpu += 1
-else:
-    print(" 🛡️ EMPATE! Os atributos possuem o mesmo valor!")
-
-time.sleep(0.8)
-print("\n" + "-" * 50)
-print(f"PLACAR FINAL: Usuário {pontos_usuario} x {pontos_cpu} CPU")
-print("-" * 50)
+    # --- BOTÃO DE JOGAR NOVAMENTE ---
+    jogar_de_novo = input("Deseja jogar novamente? (S/N): ").strip().lower()
+    if jogar_de_novo != 's':
+        print("\nObrigado por jogar Super Naruto! Até a próxima! 👋")
+        break  # Sai do loop e encerra o programa
